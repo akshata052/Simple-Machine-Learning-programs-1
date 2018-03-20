@@ -69,14 +69,12 @@ if not es.indices.exists(INDEX_NAME):
 
 #INDEXING ALL FILES:
 compath = "C:/Users/ap/aquaint/"
-endpath=["apw/1998","apw/1999","apw/2000","nyt/1998","nyt/1999","nyt/2000","xie/1996","xie/1997","xie/1998","xie/1999","xie/2000"]
+endpath=["apw/1998","apw/1999","apw/2000"]
 for ep in endpath:
     mypath = [compath+ep]
 #repeat the following for all the directories by setting mypath
     from os import listdir
     from os.path import isfile, join
-    res = es.get(index="aquaint", doc_type='doc', id='APW19980610.1778')
-    print(res['_source'])
     for m in mypath:
         onlyfiles = [f for f in listdir(m) if isfile(join(m, f))]
         for f in onlyfiles:
