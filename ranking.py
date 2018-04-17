@@ -62,7 +62,7 @@ with open(QUERY_FILE, "r") as fin:
     for line in fin.readlines():
         qid, query = line.strip().split(" ", 1)
         queries[qid] = query
-#sjekk at query og output file sin path fungerer
+
 
 with open(OUTPUT_FILE, "w") as fout:
     # write header
