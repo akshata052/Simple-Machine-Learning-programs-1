@@ -24,13 +24,10 @@ def analyze_query(es, query):
 
 def score_mlm(es, clm, qterms, doc_id):
     score = 0  # log P(q|d)
-    
-    # Getting term frequency statistics for the given document field from Elasticsearch
-    # Note that global term statistics are not needed (`term_statistics=False`)
+ 
     tv = es.termvectors(index=INDEX_NAME, doc_type=DOC_TYPE, id=doc_id, fields=FIELDS,
                               term_statistics=False).get("term_vectors", {})
 
-    # NOTE: Keep in mind that a given document field might be empty. In that case there is no tv[field].
     
     # scoring the query
     for t in qterms:
@@ -38,8 +35,7 @@ def score_mlm(es, clm, qterms, doc_id):
         for i, field in enumerate(FIELDS):
             Pt_theta_di = 0
             F_q = 0
-            # TODO compute the field language model $P(t|\theta_{d_i})$ with Jelinek-Mercer smoothing
-            #ttf correct? regne ut Ft,q. Test i evaluation med ranked_file=data/mlm-default.txt
+            
       
             hits = clm._es.search(index=INDEX_NAME, body={"query": {"match": {field: t}}},
                                _source=False, size=1).get("hits", {}).get("hits", {})
@@ -67,13 +63,8 @@ def score_mlm(es, clm, qterms, doc_id):
             #print(Pt_theta_di)
 
 
-            # NOTE keep in mind that the term vector will not contain `term` as a key if the document doesn't
-            # contain that term; you will still need to use the background term probabilities for that term.
-            # You can get the background term probability using `clm.prob(field, t)`
             
             Pt_theta_d += FIELD_WEIGHTS[i] * Pt_theta_di
-            #print(Pt_theta_d)
-        # TODO uncomment this line once you computed Pt_theta_d (and it is >0)
         score += math.log(Pt_theta_d) #*F_q 
         print(score)
     
