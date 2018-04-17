@@ -68,7 +68,7 @@ if not es.indices.exists(INDEX_NAME):
     es.indices.create(index=INDEX_NAME, body=INDEX_SETTINGS)
 
 #INDEXING ALL FILES:
-compath = "C:/Users/ap/aquaint/"
+compath = "data/aquaint/"
 endpath=["apw/1998","apw/1999","apw/2000"]
 for ep in endpath:
     mypath = [compath+ep]
